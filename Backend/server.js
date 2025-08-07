@@ -77,6 +77,62 @@ app.post('/caption', async (req, res) => {
   }
 });
 
+// Endpoint for Language Translation
+app.post('/translate', async (req, res) => {
+  try {
+    const { text, language } = req.body;
+    const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+    const prompt = `Translate the following text to ${language}: \n\n${text}`;
+    
+    const result = await model.generateContent(prompt);
+    const response = await result.response;
+    const translation = response.text();
+
+    res.json({ translation });
+  } catch (error) {
+    console.error('Translation error:', error);
+    res.status(500).json({ error: 'Failed to translate text.' });
+  }
+});
+
+// Endpoint for Code Explanation
+app.post('/explain-code', async (req, res) => {
+  try {
+    const { code } = req.body;
+    const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+    const prompt = `Explain this code in a simple way, line by line: \n\n\`\`\`\n${code}\n\`\`\``;
+    
+    const result = await model.generateContent(prompt);
+    const response = await result.response;
+    const explanation = response.text();
+
+    res.json({ explanation });
+  } catch (error) {
+    console.error('Code explanation error:', error);
+    res.status(500).json({ error: 'Failed to explain code.' });
+  }
+});
+
+// Endpoint for Visual Q&A
+app.post('/visual-qa', async (req, res) => {
+  try {
+    const { image, mimeType, question } = req.body;
+    const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+    
+    const imagePart = { inlineData: { data: image, mimeType } };
+    const promptParts = [question, imagePart];
+
+    const result = await model.generateContent(promptParts);
+    const response = await result.response;
+    const answer = response.text();
+    
+    res.json({ answer });
+  } catch (error) {
+    console.error('Visual Q&A error:', error);
+    res.status(500).json({ error: 'Failed to get answer.' });
+  }
+});
+
 // Start the server
 const PORT = 3000;
 app.listen(PORT, () => {
