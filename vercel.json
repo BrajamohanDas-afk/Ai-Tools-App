@@ -2,7 +2,7 @@
   "rewrites": [
     {
       "source": "/(summarize|caption|translate|explain-code|visual-qa)",
-      "destination": "/backend/server.js"
+      "destination": "/Backend/server.js"
     }
   ]
 }
