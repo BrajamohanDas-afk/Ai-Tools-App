@@ -10,7 +10,7 @@ dotenv.config();
 // Initialize Express app
 const app = express();
 
-// Middleware to parse JSON bodies (with a limit for base64 images) and serve static files
+// Middleware to parse JSON bodies (with a limit for base64 images)
 app.use(cors());
 app.use(express.json({ limit: '50mb' }));
 
@@ -32,7 +32,6 @@ app.post('/summarize', async (req, res) => {
       return res.status(400).json({ error: 'No text provided.' });
     }
     
-    // UPDATED: Changed model from 'gemini-pro' to 'gemini-1.5-flash'
     const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
     const prompt = `Summarize the following text:\n\n${inputText}`;
     
@@ -55,7 +54,6 @@ app.post('/caption', async (req, res) => {
         return res.status(400).json({ error: 'No image data provided.' });
     }
 
-    // UPDATED: Changed model from 'gemini-pro-vision' to 'gemini-1.5-flash'
     const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
     const prompt = "Describe this image in detail.";
     
@@ -133,10 +131,11 @@ app.post('/visual-qa', async (req, res) => {
   }
 });
 
-// Start the server
+// Start the server (This is commented out for Vercel)
 // const PORT = 3000;
 // app.listen(PORT, () => {
 //   console.log(`Server running on http://localhost:${PORT}`);
 // });
 
+// For Vercel, you need to export the app instance
 module.exports = app;
