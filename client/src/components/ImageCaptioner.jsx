@@ -32,7 +32,7 @@ function ImageCaptioner({ addToHistory }) {
       const base64data = reader.result.split(',')[1];
       const mimeType = file.type;
       try {
-        const response = await axios.post('http://localhost:3000/caption', {
+        const response = await axios.post('/caption', {
           image: base64data,
           mimeType: mimeType,
         });

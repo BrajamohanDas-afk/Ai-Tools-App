@@ -12,7 +12,7 @@ function CodeExplainer({ addToHistory }) {
     setLoading(true);
     setExplanation('');
     try {
-      const response = await axios.post('http://localhost:3000/explain-code', { code });
+      const response = await axios.post('/explain-code', { code });
       const newExplanation = response.data.explanation;
       setExplanation(newExplanation);
 

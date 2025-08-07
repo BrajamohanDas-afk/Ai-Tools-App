@@ -13,7 +13,7 @@ function Translator({ addToHistory }) {
     setLoading(true);
     setOutputText('');
     try {
-      const response = await axios.post('http://localhost:3000/translate', {
+      const response = await axios.post('/translate', {
         text: inputText,
         language: targetLanguage
       });

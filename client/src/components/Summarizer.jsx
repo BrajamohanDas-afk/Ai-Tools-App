@@ -12,7 +12,7 @@ function Summarizer({ addToHistory }) {
     setLoading(true);
     setSummary('');
     try {
-      const response = await axios.post('http://localhost:3000/summarize', { text });
+      const response = await axios.post('/summarize', { text });
       const newSummary = response.data.summary;
       setSummary(newSummary);
 

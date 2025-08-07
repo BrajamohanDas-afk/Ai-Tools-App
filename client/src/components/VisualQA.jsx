@@ -33,7 +33,7 @@ function VisualQA({ addToHistory }) {
       const base64data = reader.result.split(',')[1];
       const mimeType = file.type;
       try {
-        const response = await axios.post('http://localhost:3000/visual-qa', {
+        const response = await axios.post('/visual-qa', {
           image: base64data,
           mimeType: mimeType,
           question: question
