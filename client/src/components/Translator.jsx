@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-function Translator() {
+// 1. Receive the addToHistory function as a prop
+function Translator({ addToHistory }) {
   const [inputText, setInputText] = useState('');
   const [outputText, setOutputText] = useState('');
   const [targetLanguage, setTargetLanguage] = useState('Spanish');
@@ -12,11 +13,20 @@ function Translator() {
     setLoading(true);
     setOutputText('');
     try {
-      const response = await axios.post('http://localhost:3000/translate', { 
+      const response = await axios.post('http://localhost:3000/translate', {
         text: inputText,
-        language: targetLanguage 
+        language: targetLanguage
       });
-      setOutputText(response.data.translation);
+      const newTranslation = response.data.translation;
+      setOutputText(newTranslation);
+
+      // 2. Call addToHistory with the result
+      addToHistory({
+        type: 'Translator',
+        query: `${inputText.substring(0, 25)}... to ${targetLanguage}`,
+        result: newTranslation,
+      });
+
     } catch (error) {
       console.error("Error translating text:", error);
       setOutputText('Failed to translate text.');

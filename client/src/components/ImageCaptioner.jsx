@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-function ImageCaptioner() {
+// 1. Receive the addToHistory function as a prop
+function ImageCaptioner({ addToHistory }) {
   const [file, setFile] = useState(null);
   const [preview, setPreview] = useState('');
   const [caption, setCaption] = useState('');
@@ -12,9 +13,7 @@ function ImageCaptioner() {
     if (selectedFile) {
       setFile(selectedFile);
       const reader = new FileReader();
-      reader.onloadend = () => {
-        setPreview(reader.result);
-      };
+      reader.onloadend = () => setPreview(reader.result);
       reader.readAsDataURL(selectedFile);
     }
   };
@@ -26,6 +25,7 @@ function ImageCaptioner() {
     }
     setLoading(true);
     setCaption('');
+
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onloadend = async () => {
@@ -36,7 +36,16 @@ function ImageCaptioner() {
           image: base64data,
           mimeType: mimeType,
         });
-        setCaption(response.data.caption);
+        const newCaption = response.data.caption;
+        setCaption(newCaption);
+
+        // 2. Call addToHistory with the result
+        addToHistory({
+          type: 'Captioner',
+          query: file.name, // Use the image filename as the query
+          result: newCaption,
+        });
+
       } catch (error) {
         console.error('Error generating caption:', error);
         setCaption('Failed to generate caption.');
@@ -51,7 +60,7 @@ function ImageCaptioner() {
       <h2 className="text-2xl mb-4 text-center">Image Captioner</h2>
       <input
         type="file"
-        accept="image/png, image/jpeg"
+        accept="image/*"
         onChange={handleFileChange}
         className="block w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
       />
@@ -63,14 +72,14 @@ function ImageCaptioner() {
       <button
         onClick={handleCaption}
         disabled={loading}
-        className="mt-4 w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md transition duration-300 disabled:bg-gray-500"
+        className="mt-4 w-full bg-teal-500 hover:bg-teal-600 text-white font-bold py-2 px-4 rounded-md transition-transform hover:scale-105"
       >
         {loading ? 'Generating...' : 'Generate Caption'}
       </button>
       {caption && (
         <div className="mt-6 p-4 bg-gray-700 rounded-md">
           <h3 className="text-xl mb-2">Caption:</h3>
-          <p className="text-gray-300 whitespace-pre-wrap">{caption}</p>
+          <p className="text-gray-300">{caption}</p>
         </div>
       )}
     </div>

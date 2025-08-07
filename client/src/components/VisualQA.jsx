@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-function VisualQA() {
+// 1. Receive the addToHistory function as a prop
+function VisualQA({ addToHistory }) {
   const [file, setFile] = useState(null);
   const [preview, setPreview] = useState('');
   const [question, setQuestion] = useState('');
@@ -37,7 +38,16 @@ function VisualQA() {
           mimeType: mimeType,
           question: question
         });
-        setAnswer(response.data.answer);
+        const newAnswer = response.data.answer;
+        setAnswer(newAnswer);
+
+        // 2. Call addToHistory with the result
+        addToHistory({
+          type: 'Visual Q&A',
+          query: question,
+          result: newAnswer,
+        });
+
       } catch (error) {
         console.error('Error with Visual Q&A:', error);
         setAnswer('Failed to get an answer.');

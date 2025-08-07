@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-function Summarizer() {
+// 1. Receive the addToHistory function as a prop
+function Summarizer({ addToHistory }) {
   const [text, setText] = useState('');
   const [summary, setSummary] = useState('');
   const [loading, setLoading] = useState(false);
@@ -10,10 +11,18 @@ function Summarizer() {
     if (!text) return;
     setLoading(true);
     setSummary('');
-
     try {
       const response = await axios.post('http://localhost:3000/summarize', { text });
-      setSummary(response.data.summary);
+      const newSummary = response.data.summary;
+      setSummary(newSummary);
+
+      // 2. Call addToHistory with the result
+      addToHistory({
+        type: 'Summarizer',
+        query: text.substring(0, 40) + '...', // A short preview of the query
+        result: newSummary,
+      });
+
     } catch (error) {
       console.error("Error summarizing text:", error);
       setSummary('Failed to summarize text.');
@@ -22,18 +31,18 @@ function Summarizer() {
     }
   };
 
+  // ... rest of the component stays the same
   return (
     <div className="w-full max-w-2xl bg-gray-800 p-6 rounded-lg shadow-lg">
       <h2 className="text-2xl mb-4 text-center">Text Summarizer</h2>
       <textarea
-        className="w-full p-2 bg-gray-700 rounded-md border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
-        rows="10"
-        placeholder="Paste your text here..."
+        className="w-full h-48 p-2 bg-gray-700 rounded-md border border-gray-600"
         value={text}
         onChange={(e) => setText(e.target.value)}
+        placeholder="Paste your text here to summarize..."
       ></textarea>
       <button
-        className="mt-4 w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md transition duration-300 disabled:bg-gray-500"
+        className="mt-4 w-full bg-teal-500 hover:bg-teal-600 text-white font-bold py-2 px-4 rounded-md transition-transform hover:scale-105"
         onClick={handleSummarize}
         disabled={loading}
       >

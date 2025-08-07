@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-function CodeExplainer() {
+// 1. Receive the addToHistory function as a prop
+function CodeExplainer({ addToHistory }) {
   const [code, setCode] = useState('');
   const [explanation, setExplanation] = useState('');
   const [loading, setLoading] = useState(false);
@@ -12,7 +13,16 @@ function CodeExplainer() {
     setExplanation('');
     try {
       const response = await axios.post('http://localhost:3000/explain-code', { code });
-      setExplanation(response.data.explanation);
+      const newExplanation = response.data.explanation;
+      setExplanation(newExplanation);
+
+      // 2. Call addToHistory with the result
+      addToHistory({
+        type: 'Code Explainer',
+        query: code.substring(0, 40) + '...',
+        result: newExplanation,
+      });
+
     } catch (error) {
       console.error("Error explaining code:", error);
       setExplanation('Failed to explain code.');
