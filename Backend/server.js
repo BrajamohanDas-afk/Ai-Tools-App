@@ -4,35 +4,33 @@ const path = require('path');
 const { GoogleGenerativeAI } = require('@google/generative-ai');
 const cors = require('cors');
 
-// Load environment variables from .env file
+// Load environment variables
 dotenv.config();
 
 // Initialize Express app
 const app = express();
 
-// Middleware to parse JSON bodies (with a limit for base64 images)
+// Middleware
 app.use(cors({
-  origin: ['http://localhost:5173', 'https://*.railway.app', 'https://*.up.railway.app'],
+  origin: ['http://localhost:5173', 'https://*.netlify.app', 'https://*.onrender.com'],
   credentials: true
 }));
 app.use(express.json({ limit: '50mb' }));
 
-// --- Google Generative AI Setup ---
+// Google AI Setup
 const apiKey = process.env.GOOGLE_API_KEY;
 if (!apiKey) {
-  console.error('Error: GOOGLE_API_KEY is missing in .env file');
-  process.exit(1); // Exit if the API key is not found
+  console.error('Error: GOOGLE_API_KEY is missing');
+  process.exit(1);
 }
 const genAI = new GoogleGenerativeAI(apiKey);
 
-// Health check endpoint
+// Health check
 app.get('/', (req, res) => {
   res.json({ message: 'AI Tools Backend is running!' });
 });
 
-// --- API Endpoints ---
-
-// Endpoint for Text Summarization
+// Text Summarization
 app.post('/summarize', async (req, res) => {
   try {
     const inputText = req.body.text;
@@ -54,7 +52,7 @@ app.post('/summarize', async (req, res) => {
   }
 });
 
-// Endpoint for Image Captioning
+// Image Captioning
 app.post('/caption', async (req, res) => {
   try {
     const { image, mimeType } = req.body;
@@ -83,7 +81,7 @@ app.post('/caption', async (req, res) => {
   }
 });
 
-// Endpoint for Language Translation
+// Language Translation
 app.post('/translate', async (req, res) => {
   try {
     const { text, language } = req.body;
@@ -101,7 +99,7 @@ app.post('/translate', async (req, res) => {
   }
 });
 
-// Endpoint for Code Explanation
+// Code Explanation
 app.post('/explain-code', async (req, res) => {
   try {
     const { code } = req.body;
@@ -119,7 +117,7 @@ app.post('/explain-code', async (req, res) => {
   }
 });
 
-// Endpoint for Visual Q&A
+// Visual Q&A
 app.post('/visual-qa', async (req, res) => {
   try {
     const { image, mimeType, question } = req.body;
@@ -139,10 +137,8 @@ app.post('/visual-qa', async (req, res) => {
   }
 });
 
-// Start the server
+// Start server
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
-
-module.exports = app;
