@@ -21,7 +21,7 @@ function Translator({ addToHistory, viewingHistoryItem }) {
     setLoading(true);
     setOutputText('');
     try {
-      const response = await axios.post('http://localhost:3000/translate', {
+      const response = await axios.post('https://wbk9apxoa0.execute-api.ap-south-1.amazonaws.com/translate', {
         text: inputText,
         language: targetLanguage
       });
