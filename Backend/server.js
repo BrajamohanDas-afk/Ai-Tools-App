@@ -11,7 +11,10 @@ dotenv.config();
 const app = express();
 
 // Middleware to parse JSON bodies (with a limit for base64 images)
-app.use(cors());
+app.use(cors({
+  origin: ['http://localhost:5173', 'https://*.railway.app', 'https://*.up.railway.app'],
+  credentials: true
+}));
 app.use(express.json({ limit: '50mb' }));
 
 // --- Google Generative AI Setup ---
@@ -21,6 +24,11 @@ if (!apiKey) {
   process.exit(1); // Exit if the API key is not found
 }
 const genAI = new GoogleGenerativeAI(apiKey);
+
+// Health check endpoint
+app.get('/', (req, res) => {
+  res.json({ message: 'AI Tools Backend is running!' });
+});
 
 // --- API Endpoints ---
 
@@ -132,10 +140,9 @@ app.post('/visual-qa', async (req, res) => {
 });
 
 // Start the server
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
+  console.log(`Server running on port ${PORT}`);
 });
 
-// For Vercel, you need to export the app instance
-// module.exports = app;
+module.exports = app;

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import API_CONFIG from '../config/api';
 
 function CodeExplainer({ addToHistory, viewingHistoryItem }) {
   const [code, setCode] = useState('');
@@ -20,7 +21,7 @@ function CodeExplainer({ addToHistory, viewingHistoryItem }) {
     setLoading(true);
     setExplanation('');
     try {
-      const response = await axios.post('http://localhost:3000/explain-code', { code });
+      const response = await axios.post(`${API_CONFIG.BASE_URL}/explain-code`, { code });
       const newExplanation = response.data.explanation;
       setExplanation(newExplanation);
       addToHistory({

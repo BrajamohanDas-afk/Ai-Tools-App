@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import API_CONFIG from '../config/api';
 
 function ImageCaptioner({ addToHistory, viewingHistoryItem }) {
   const [file, setFile] = useState(null);
@@ -41,7 +42,7 @@ function ImageCaptioner({ addToHistory, viewingHistoryItem }) {
       const base64data = reader.result.split(',')[1];
       const mimeType = file.type;
       try {
-        const response = await axios.post('http://localhost:3000/caption', {
+        const response = await axios.post(`${API_CONFIG.BASE_URL}/caption`, {
           image: base64data,
           mimeType: mimeType,
         });

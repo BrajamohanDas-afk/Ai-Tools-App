@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import API_CONFIG from '../config/api';
 
 function Translator({ addToHistory, viewingHistoryItem }) {
   const [inputText, setInputText] = useState('');
@@ -21,7 +22,7 @@ function Translator({ addToHistory, viewingHistoryItem }) {
     setLoading(true);
     setOutputText('');
     try {
-      const response = await axios.post('http://localhost:3000/translate', {
+      const response = await axios.post(`${API_CONFIG.BASE_URL}/translate`, {
         text: inputText,
         language: targetLanguage
       });

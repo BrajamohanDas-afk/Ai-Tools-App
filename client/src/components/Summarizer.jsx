@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import API_CONFIG from '../config/api';
 
 function Summarizer({ addToHistory, viewingHistoryItem }) {
   const [text, setText] = useState('');
@@ -20,7 +21,7 @@ function Summarizer({ addToHistory, viewingHistoryItem }) {
     setLoading(true);
     setSummary('');
     try {
-      const response = await axios.post('http://localhost:3000/summarize', { text });
+      const response = await axios.post('${API_CONFIG.BASE_URL}/summarize', { text });
       const newSummary = response.data.summary;
       setSummary(newSummary);
 
