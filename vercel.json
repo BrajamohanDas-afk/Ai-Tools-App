@@ -1,8 +1,0 @@
-{
-  "rewrites": [
-    {
-      "source": "/(summarize|caption|translate|explain-code|visual-qa)",
-      "destination": "/Backend/server.js"
-    }
-  ]
-}
