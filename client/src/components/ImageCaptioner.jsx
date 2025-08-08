@@ -41,7 +41,7 @@ function ImageCaptioner({ addToHistory, viewingHistoryItem }) {
       const base64data = reader.result.split(',')[1];
       const mimeType = file.type;
       try {
-        const response = await axios.post('https://wbk9apxoa0.execute-api.ap-south-1.amazonaws.com/caption', {
+        const response = await axios.post('http://localhost:3000/caption', {
           image: base64data,
           mimeType: mimeType,
         });

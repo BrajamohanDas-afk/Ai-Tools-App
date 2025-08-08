@@ -20,7 +20,7 @@ function Summarizer({ addToHistory, viewingHistoryItem }) {
     setLoading(true);
     setSummary('');
     try {
-      const response = await axios.post('https://wbk9apxoa0.execute-api.ap-south-1.amazonaws.com/summarize', { text });
+      const response = await axios.post('http://localhost:3000/summarize', { text });
       const newSummary = response.data.summary;
       setSummary(newSummary);
 
