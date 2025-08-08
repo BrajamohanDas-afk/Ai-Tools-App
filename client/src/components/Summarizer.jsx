@@ -1,25 +1,32 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-// 1. Receive the addToHistory function as a prop
-function Summarizer({ addToHistory }) {
+function Summarizer({ addToHistory, viewingHistoryItem }) {
   const [text, setText] = useState('');
   const [summary, setSummary] = useState('');
   const [loading, setLoading] = useState(false);
+
+  // This effect runs when a history item is clicked
+  useEffect(() => {
+    if (viewingHistoryItem && viewingHistoryItem.type === 'Summarizer') {
+      const queryText = viewingHistoryItem.query.replace(/\.\.\.$/, '');
+      setText(queryText);
+      setSummary(viewingHistoryItem.result);
+    }
+  }, [viewingHistoryItem]);
 
   const handleSummarize = async () => {
     if (!text) return;
     setLoading(true);
     setSummary('');
     try {
-      const response = await axios.post('/summarize', { text });
+      const response = await axios.post('http://localhost:3000/summarize', { text });
       const newSummary = response.data.summary;
       setSummary(newSummary);
 
-      // 2. Call addToHistory with the result
       addToHistory({
         type: 'Summarizer',
-        query: text.substring(0, 40) + '...', // A short preview of the query
+        query: text.substring(0, 40) + '...',
         result: newSummary,
       });
 
@@ -31,7 +38,6 @@ function Summarizer({ addToHistory }) {
     }
   };
 
-  // ... rest of the component stays the same
   return (
     <div className="w-full max-w-2xl bg-gray-800 p-6 rounded-lg shadow-lg">
       <h2 className="text-2xl mb-4 text-center">Text Summarizer</h2>

@@ -1,28 +1,33 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-// 1. Receive the addToHistory function as a prop
-function CodeExplainer({ addToHistory }) {
+function CodeExplainer({ addToHistory, viewingHistoryItem }) {
   const [code, setCode] = useState('');
   const [explanation, setExplanation] = useState('');
   const [loading, setLoading] = useState(false);
+
+  // This effect runs when a history item is clicked
+  useEffect(() => {
+    if (viewingHistoryItem && viewingHistoryItem.type === 'Code Explainer') {
+      const queryCode = viewingHistoryItem.query.replace(/\.\.\.$/, '');
+      setCode(queryCode);
+      setExplanation(viewingHistoryItem.result);
+    }
+  }, [viewingHistoryItem]);
 
   const handleExplain = async () => {
     if (!code) return;
     setLoading(true);
     setExplanation('');
     try {
-      const response = await axios.post('/explain-code', { code });
+      const response = await axios.post('http://localhost:3000/explain-code', { code });
       const newExplanation = response.data.explanation;
       setExplanation(newExplanation);
-
-      // 2. Call addToHistory with the result
       addToHistory({
         type: 'Code Explainer',
         query: code.substring(0, 40) + '...',
         result: newExplanation,
       });
-
     } catch (error) {
       console.error("Error explaining code:", error);
       setExplanation('Failed to explain code.');

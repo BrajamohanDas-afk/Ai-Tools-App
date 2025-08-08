@@ -1,32 +1,37 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-// 1. Receive the addToHistory function as a prop
-function Translator({ addToHistory }) {
+function Translator({ addToHistory, viewingHistoryItem }) {
   const [inputText, setInputText] = useState('');
   const [outputText, setOutputText] = useState('');
   const [targetLanguage, setTargetLanguage] = useState('Spanish');
   const [loading, setLoading] = useState(false);
+
+  // This effect runs when a history item is clicked
+  useEffect(() => {
+    if (viewingHistoryItem && viewingHistoryItem.type === 'Translator') {
+      const queryText = viewingHistoryItem.query.split('... to ')[0];
+      setInputText(queryText);
+      setOutputText(viewingHistoryItem.result);
+    }
+  }, [viewingHistoryItem]);
 
   const handleTranslate = async () => {
     if (!inputText) return;
     setLoading(true);
     setOutputText('');
     try {
-      const response = await axios.post('/translate', {
+      const response = await axios.post('http://localhost:3000/translate', {
         text: inputText,
         language: targetLanguage
       });
       const newTranslation = response.data.translation;
       setOutputText(newTranslation);
-
-      // 2. Call addToHistory with the result
       addToHistory({
         type: 'Translator',
         query: `${inputText.substring(0, 25)}... to ${targetLanguage}`,
         result: newTranslation,
       });
-
     } catch (error) {
       console.error("Error translating text:", error);
       setOutputText('Failed to translate text.');

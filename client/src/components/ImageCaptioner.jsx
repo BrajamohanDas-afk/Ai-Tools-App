@@ -1,12 +1,22 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-// 1. Receive the addToHistory function as a prop
-function ImageCaptioner({ addToHistory }) {
+function ImageCaptioner({ addToHistory, viewingHistoryItem }) {
   const [file, setFile] = useState(null);
   const [preview, setPreview] = useState('');
   const [caption, setCaption] = useState('');
   const [loading, setLoading] = useState(false);
+
+  // This effect runs when a history item is clicked
+  useEffect(() => {
+    if (viewingHistoryItem && viewingHistoryItem.type === 'Captioner') {
+      // We can't restore the image preview from history easily,
+      // but we can show the resulting caption.
+      setPreview('');
+      setFile(null);
+      setCaption(viewingHistoryItem.result);
+    }
+  }, [viewingHistoryItem]);
 
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
@@ -25,27 +35,23 @@ function ImageCaptioner({ addToHistory }) {
     }
     setLoading(true);
     setCaption('');
-
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onloadend = async () => {
       const base64data = reader.result.split(',')[1];
       const mimeType = file.type;
       try {
-        const response = await axios.post('/caption', {
+        const response = await axios.post('http://localhost:3000/caption', {
           image: base64data,
           mimeType: mimeType,
         });
         const newCaption = response.data.caption;
         setCaption(newCaption);
-
-        // 2. Call addToHistory with the result
         addToHistory({
           type: 'Captioner',
-          query: file.name, // Use the image filename as the query
+          query: file.name,
           result: newCaption,
         });
-
       } catch (error) {
         console.error('Error generating caption:', error);
         setCaption('Failed to generate caption.');
@@ -71,8 +77,8 @@ function ImageCaptioner({ addToHistory }) {
       )}
       <button
         onClick={handleCaption}
-        disabled={loading}
-        className="mt-4 w-full bg-teal-500 hover:bg-teal-600 text-white font-bold py-2 px-4 rounded-md transition-transform hover:scale-105"
+        disabled={loading || !file}
+        className="mt-4 w-full bg-teal-500 hover:bg-teal-600 text-white font-bold py-2 px-4 rounded-md transition-transform hover:scale-105 disabled:bg-gray-500"
       >
         {loading ? 'Generating...' : 'Generate Caption'}
       </button>

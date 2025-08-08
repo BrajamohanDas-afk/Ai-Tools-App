@@ -131,11 +131,11 @@ app.post('/visual-qa', async (req, res) => {
   }
 });
 
-// Start the server (This is commented out for Vercel)
-// const PORT = 3000;
-// app.listen(PORT, () => {
-//   console.log(`Server running on http://localhost:${PORT}`);
-// });
+// Start the server
+const PORT = 3000;
+app.listen(PORT, () => {
+  console.log(`Server running on http://localhost:${PORT}`);
+});
 
 // For Vercel, you need to export the app instance
-module.exports = app;
+// module.exports = app;
