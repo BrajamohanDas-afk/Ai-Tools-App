@@ -19,9 +19,8 @@ function Summarizer({ addToHistory, viewingHistoryItem }) {
   const handleSummarize = async () => {
     if (!text) return;
     setLoading(true);
-    setSummary('');
-    try {
-      const response = await axios.post('${API_CONFIG.BASE_URL}/summarize', { text });
+    setSummary('');    try {
+      const response = await axios.post(`${API_CONFIG.BASE_URL}/summarize`, { text });
       const newSummary = response.data.summary;
       setSummary(newSummary);
 
