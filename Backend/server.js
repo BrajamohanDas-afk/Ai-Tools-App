@@ -12,15 +12,26 @@ const app = express();
 
 // Middleware
 app.use(cors({
-  origin: [
-    'http://localhost:5173', 
-    'http://localhost:3000',
-    'https://client-bc433n2q7-brajamohandas-afks-projects.vercel.app',
-    /\.vercel\.app$/,
-    /\.netlify\.app$/,
-    /\.onrender\.com$/
-  ],
-  credentials: true
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    
+    const allowedOrigins = [
+      'http://localhost:5173',
+      'http://localhost:3000',
+      'https://client-bc433n2q7-brajamohandas-afks-projects.vercel.app'
+    ];
+    
+    // Allow any vercel.app domain
+    if (origin.includes('.vercel.app') || allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+    
+    return callback(new Error('Not allowed by CORS'));
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'Origin', 'Accept']
 }));
 app.use(express.json({ limit: '50mb' }));
 
@@ -39,6 +50,8 @@ app.get('/', (req, res) => {
 
 // Text Summarization
 app.post('/summarize', async (req, res) => {
+  console.log('Received summarize request:', req.body);
+  console.log('Request origin:', req.headers.origin);
   try {
     const inputText = req.body.text;
     if (!inputText || inputText.trim() === '') {
