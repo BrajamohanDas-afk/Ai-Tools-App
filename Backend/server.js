@@ -10,25 +10,9 @@ dotenv.config();
 // Initialize Express app
 const app = express();
 
-// Middleware
+// Middleware - Temporarily allow all origins for debugging
 app.use(cors({
-  origin: function (origin, callback) {
-    // Allow requests with no origin (like mobile apps or curl requests)
-    if (!origin) return callback(null, true);
-    
-    const allowedOrigins = [
-      'http://localhost:5173',
-      'http://localhost:3000',
-      'https://client-bc433n2q7-brajamohandas-afks-projects.vercel.app'
-    ];
-    
-    // Allow any vercel.app domain
-    if (origin.includes('.vercel.app') || allowedOrigins.includes(origin)) {
-      return callback(null, true);
-    }
-    
-    return callback(new Error('Not allowed by CORS'));
-  },
+  origin: true,
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'Origin', 'Accept']
