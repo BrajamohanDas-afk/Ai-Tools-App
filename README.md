@@ -146,9 +146,6 @@ PORT=3000
 | POST | `/explain-code` | Explain code snippets |
 | POST | `/visual-qa` | Visual question answering |
 
-## 🎨 Screenshots
-
-*Add screenshots of your app here to showcase the UI*
 
 ## 🤝 Contributing
 
