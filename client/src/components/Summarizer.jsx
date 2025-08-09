@@ -39,25 +39,25 @@ function Summarizer({ addToHistory, viewingHistoryItem }) {
   };
 
   return (
-    <div className="w-full max-w-2xl bg-gray-800 p-6 rounded-lg shadow-lg">
-      <h2 className="text-2xl mb-4 text-center">Text Summarizer</h2>
+    <div className="w-full max-w-4xl bg-gray-800 p-4 sm:p-6 rounded-lg shadow-lg">
+      <h2 className="text-xl sm:text-2xl mb-4 text-center">Text Summarizer</h2>
       <textarea
-        className="w-full h-48 p-2 bg-gray-700 rounded-md border border-gray-600"
+        className="w-full h-32 sm:h-48 p-3 bg-gray-700 rounded-md border border-gray-600 text-sm sm:text-base resize-none"
         value={text}
         onChange={(e) => setText(e.target.value)}
         placeholder="Paste your text here to summarize..."
       ></textarea>
       <button
-        className="mt-4 w-full bg-teal-500 hover:bg-teal-600 text-white font-bold py-2 px-4 rounded-md transition-transform hover:scale-105"
+        className="mt-4 w-full bg-teal-500 hover:bg-teal-600 text-white font-bold py-2 sm:py-3 px-4 rounded-md transition-all duration-200 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
         onClick={handleSummarize}
-        disabled={loading}
+        disabled={loading || !text.trim()}
       >
         {loading ? 'Summarizing...' : 'Summarize Text'}
       </button>
       {summary && (
         <div className="mt-6 p-4 bg-gray-700 rounded-md">
-          <h3 className="text-xl mb-2">Summary:</h3>
-          <p className="text-gray-300 whitespace-pre-wrap">{summary}</p>
+          <h3 className="text-lg sm:text-xl mb-2">Summary:</h3>
+          <p className="text-gray-300 whitespace-pre-wrap text-sm sm:text-base leading-relaxed">{summary}</p>
         </div>
       )}
     </div>

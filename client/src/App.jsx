@@ -10,6 +10,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 function App() {
   const [activeView, setActiveView] = useState('summarizer');
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [history, setHistory] = useState(() => {
     const savedHistory = localStorage.getItem('ai-tools-history');
     return savedHistory ? JSON.parse(savedHistory) : [];
@@ -40,24 +41,45 @@ function App() {
     
     setActiveView(viewName);
     setViewingHistoryItem(item);
+    // Close sidebar on mobile after selecting
+    setSidebarOpen(false);
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white flex">
+    <div className="min-h-screen bg-gray-900 text-white flex flex-col lg:flex-row">
+      {/* Mobile overlay */}
+      {sidebarOpen && (
+        <div 
+          className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden" 
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
+      
       <Sidebar 
         activeView={activeView} 
-        setActiveView={setActiveView}
+        setActiveView={(view) => {
+          setActiveView(view);
+          setSidebarOpen(false); // Close sidebar on mobile after selection
+        }}
         history={history}
         onHistoryClick={handleHistoryClick}
+        isOpen={sidebarOpen}
+        onClose={() => setSidebarOpen(false)}
       />
-      <div className="flex-grow flex flex-col">
-        <Navbar currentView={activeView} />
-        <main className="flex-grow flex items-center justify-center p-8">
-          {activeView === 'summarizer' && <Summarizer addToHistory={addToHistory} viewingHistoryItem={viewingHistoryItem} />}
-          {activeView === 'captioner' && <ImageCaptioner addToHistory={addToHistory} viewingHistoryItem={viewingHistoryItem} />}
-          {activeView === 'translator' && <Translator addToHistory={addToHistory} viewingHistoryItem={viewingHistoryItem} />}
-          {activeView === 'codeExplainer' && <CodeExplainer addToHistory={addToHistory} viewingHistoryItem={viewingHistoryItem} />}
-          {activeView === 'visualQA' && <VisualQA addToHistory={addToHistory} viewingHistoryItem={viewingHistoryItem} />}
+      
+      <div className="flex-grow flex flex-col min-w-0">
+        <Navbar 
+          currentView={activeView} 
+          onMenuClick={() => setSidebarOpen(!sidebarOpen)}
+        />
+        <main className="flex-grow flex items-center justify-center p-4 sm:p-6 lg:p-8 overflow-auto">
+          <div className="w-full max-w-4xl">
+            {activeView === 'summarizer' && <Summarizer addToHistory={addToHistory} viewingHistoryItem={viewingHistoryItem} />}
+            {activeView === 'captioner' && <ImageCaptioner addToHistory={addToHistory} viewingHistoryItem={viewingHistoryItem} />}
+            {activeView === 'translator' && <Translator addToHistory={addToHistory} viewingHistoryItem={viewingHistoryItem} />}
+            {activeView === 'codeExplainer' && <CodeExplainer addToHistory={addToHistory} viewingHistoryItem={viewingHistoryItem} />}
+            {activeView === 'visualQA' && <VisualQA addToHistory={addToHistory} viewingHistoryItem={viewingHistoryItem} />}
+          </div>
         </main>
       </div>
     </div>
