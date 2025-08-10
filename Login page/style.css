@@ -1,0 +1,166 @@
+/* General Body and Font Styles */
+body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    /* --- Background Image Setup --- */
+    background-image: url('pexels-googledeepmind-18069857.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 100vh;
+    /* Centering the login panel */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* --- The Frosted Glass Panel --- */
+.login-panel {
+    width: 420px;
+    padding: 40px;
+    box-sizing: border-box;
+    color: white;
+    /* --- Glassmorphism Effect --- */
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px); /* For Safari compatibility */
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 16px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+}
+
+.form-content h2 {
+    font-size: 28px;
+    font-weight: 600;
+    text-align: center;
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+
+.form-content p {
+    text-align: center;
+    color: rgba(255, 255, 255, 0.8);
+    margin-bottom: 30px;
+}
+
+/* --- Form Element Styling --- */
+.input-group {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.input-group i {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.input-group input {
+    width: 100%;
+    padding: 14px 14px 14px 45px;
+    box-sizing: border-box;
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 8px;
+    color: white;
+    font-size: 14px;
+}
+
+.input-group input::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.input-group input:focus {
+    outline: none;
+    border-color: rgba(255, 255, 255, 0.7);
+}
+
+.form-options {
+    text-align: right;
+    margin-bottom: 25px;
+}
+
+.forgot-password, .signup-link a {
+    color: rgba(255, 255, 255, 0.9);
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.forgot-password:hover, .signup-link a:hover {
+    text-decoration: underline;
+}
+
+.login-button {
+    width: 100%;
+    padding: 15px;
+    background-color: #ffffff;
+    color: #1e1e3f;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.login-button:hover {
+    background-color: #f0f0f0;
+}
+
+/* --- Separator and Social Login --- */
+.separator {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    color: rgba(255, 255, 255, 0.7);
+    margin: 25px 0;
+}
+
+.separator .line {
+    flex-grow: 1;
+    height: 1px;
+    background-color: rgba(255, 255, 255, 0.3);
+}
+
+.separator .or-text {
+    margin: 0 15px;
+    font-size: 12px;
+}
+
+.social-logins {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.social-button {
+    width: 100%;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    background-color: rgba(255, 255, 255, 0.15);
+    color: white;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    transition: background-color 0.3s ease;
+}
+
+.social-button:hover {
+    background-color: rgba(255, 255, 255, 0.25);
+}
+
+.social-button i {
+    font-size: 18px;
+}
+
+.signup-link {
+    text-align: center;
+    margin-top: 25px;
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.8);
+}
