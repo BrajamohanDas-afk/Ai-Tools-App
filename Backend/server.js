@@ -10,16 +10,9 @@ dotenv.config();
 // Initialize Express app
 const app = express();
 
-// Middleware - CORS configuration for production
+// Middleware - CORS configuration for production - ALLOW ALL FOR DEBUGGING
 app.use(cors({
-  origin: [
-    'http://localhost:5173',
-    'http://localhost:3000', 
-    'https://client-de7vnds6k-brajamohandas-afks-projects.vercel.app',
-    'https://client-4n54jjt9q-brajamohandas-afks-projects.vercel.app',
-    /.*\.vercel\.app$/,
-    /.*\.brajamohandas-afks-projects\.vercel\.app$/
-  ],
+  origin: true, // Allow all origins temporarily
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'Origin', 'Accept', 'X-Requested-With'],
@@ -33,7 +26,21 @@ app.use(express.json({ limit: '50mb' }));
 // Request logging middleware
 app.use((req, res, next) => {
   console.log(`${new Date().toISOString()} - ${req.method} ${req.path} - Origin: ${req.headers.origin || 'none'}`);
-  next();
+  
+  // Set CORS headers manually as backup
+  const origin = req.headers.origin;
+  if (origin && (origin.includes('vercel.app') || origin.includes('localhost'))) {
+    res.header('Access-Control-Allow-Origin', origin);
+  }
+  res.header('Access-Control-Allow-Credentials', 'true');
+  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Origin,X-Requested-With,Content-Type,Accept,Authorization');
+  
+  if (req.method === 'OPTIONS') {
+    res.sendStatus(200);
+  } else {
+    next();
+  }
 });
 
 // Google AI Setup
