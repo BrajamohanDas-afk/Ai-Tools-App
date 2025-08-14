@@ -2,7 +2,6 @@ const express = require('express');
 const dotenv = require('dotenv');
 const path = require('path');
 const { GoogleGenerativeAI } = require('@google/generative-ai');
-const cors = require('cors');
 
 // Load environment variables
 dotenv.config();
@@ -10,38 +9,22 @@ dotenv.config();
 // Initialize Express app
 const app = express();
 
-// Middleware - CORS configuration for production - ALLOW ALL FOR DEBUGGING
-app.use(cors({
-  origin: true, // Allow all origins temporarily
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'Origin', 'Accept', 'X-Requested-With'],
-  optionsSuccessStatus: 200
-}));
-
-// Handle preflight requests
-app.options('*', cors());
-app.use(express.json({ limit: '50mb' }));
-
-// Request logging middleware
-app.use((req, res, next) => {
-  console.log(`${new Date().toISOString()} - ${req.method} ${req.path} - Origin: ${req.headers.origin || 'none'}`);
+// ULTIMATE CORS FIX - SET HEADERS BEFORE ANYTHING ELSE
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
+  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
   
-  // Set CORS headers manually as backup
-  const origin = req.headers.origin;
-  if (origin && (origin.includes('vercel.app') || origin.includes('localhost'))) {
-    res.header('Access-Control-Allow-Origin', origin);
-  }
-  res.header('Access-Control-Allow-Credentials', 'true');
-  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
-  res.header('Access-Control-Allow-Headers', 'Origin,X-Requested-With,Content-Type,Accept,Authorization');
-  
+  // Handle preflight
   if (req.method === 'OPTIONS') {
-    res.sendStatus(200);
-  } else {
-    next();
+    res.status(200).end();
+    return;
   }
+  
+  next();
 });
+
+app.use(express.json({ limit: '50mb' }));
 
 // Google AI Setup
 const apiKey = process.env.GOOGLE_API_KEY;
