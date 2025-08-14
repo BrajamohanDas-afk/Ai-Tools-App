@@ -1,6 +1,6 @@
 const API_CONFIG = {
   BASE_URL: process.env.NODE_ENV === 'production' 
-    ? 'https://ai-tools-app-xrtu.onrender.com'  // You'll update this after backend deployment
+    ? 'https://backend-agewilv5m-brajamohandas-afks-projects.vercel.app'
     : 'http://localhost:3000'
 };
 
