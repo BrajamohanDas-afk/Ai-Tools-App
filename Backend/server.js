@@ -10,14 +10,31 @@ dotenv.config();
 // Initialize Express app
 const app = express();
 
-// Middleware - Temporarily allow all origins for debugging
+// Middleware - CORS configuration for production
 app.use(cors({
-  origin: true,
+  origin: [
+    'http://localhost:5173',
+    'http://localhost:3000', 
+    'https://client-de7vnds6k-brajamohandas-afks-projects.vercel.app',
+    'https://client-4n54jjt9q-brajamohandas-afks-projects.vercel.app',
+    /.*\.vercel\.app$/,
+    /.*\.brajamohandas-afks-projects\.vercel\.app$/
+  ],
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'Origin', 'Accept']
+  allowedHeaders: ['Content-Type', 'Authorization', 'Origin', 'Accept', 'X-Requested-With'],
+  optionsSuccessStatus: 200
 }));
+
+// Handle preflight requests
+app.options('*', cors());
 app.use(express.json({ limit: '50mb' }));
+
+// Request logging middleware
+app.use((req, res, next) => {
+  console.log(`${new Date().toISOString()} - ${req.method} ${req.path} - Origin: ${req.headers.origin || 'none'}`);
+  next();
+});
 
 // Google AI Setup
 const apiKey = process.env.GOOGLE_API_KEY;
@@ -29,7 +46,20 @@ const genAI = new GoogleGenerativeAI(apiKey);
 
 // Health check
 app.get('/', (req, res) => {
-  res.json({ message: 'AI Tools Backend is running!' });
+  res.json({ 
+    message: 'AI Tools Backend is running!', 
+    timestamp: new Date().toISOString(),
+    cors: 'enabled'
+  });
+});
+
+// CORS test endpoint
+app.get('/test-cors', (req, res) => {
+  res.json({ 
+    message: 'CORS is working!', 
+    origin: req.headers.origin,
+    userAgent: req.headers['user-agent']
+  });
 });
 
 // Text Summarization
