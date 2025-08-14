@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: ai-tools-backend
+    env: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: GOOGLE_API_KEY
+        fromSecret: true
