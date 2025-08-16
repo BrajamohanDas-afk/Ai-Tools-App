@@ -2,8 +2,8 @@
 
 > A comprehensive suite of AI-powered tools built with React and Google's Generative AI
 
-[![Live Demo](https://img.shields.io/badge/Live-Demo-brightgreen?style=for-the-badge)](https://client-49yhdn6ca-brajamohandas-afks-projects.vercel.app)
-[![Backend API](https://img.shields.io/badge/Backend-API-blue?style=for-the-badge)](https://ai-tools-app-xrtu.onrender.com)
+[![Live Demo](https://img.shields.io/badge/Live-Demo-brightgreen?style=for-the-badge)](https://ai-tools-frontend-iota.vercel.app)
+[![Backend API](https://img.shields.io/badge/Backend-API-blue?style=for-the-badge)](https://ai-tools-backend-m520.onrender.com)
 
 ## ✨ Features
 
@@ -53,9 +53,15 @@ This AI Tools App provides five powerful AI-driven features:
 
 ## 🌐 Live Demo
 
-**Frontend**: [https://client-49yhdn6ca-brajamohandas-afks-projects.vercel.app](https://client-49yhdn6ca-brajamohandas-afks-projects.vercel.app)
+**Frontend**: [https://ai-tools-frontend-iota.vercel.app](https://ai-tools-frontend-iota.vercel.app)
 
-**Backend API**: [https://ai-tools-app-xrtu.onrender.com](https://ai-tools-app-xrtu.onrender.com)
+**Backend API**: [https://ai-tools-backend-m520.onrender.com](https://ai-tools-backend-m520.onrender.com)
+
+### 🚀 Deployment Status
+- ✅ **Frontend**: Successfully deployed on Vercel
+- ✅ **Backend**: Successfully deployed on Render
+- ✅ **API Integration**: All endpoints working correctly
+- ✅ **CORS**: Properly configured for cross-origin requests
 
 ## 📋 Prerequisites
 
