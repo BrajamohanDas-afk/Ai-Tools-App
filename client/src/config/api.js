@@ -1,6 +1,6 @@
 const API_CONFIG = {
   BASE_URL: process.env.NODE_ENV === 'production' 
-    ? 'https://aitools-api-fresh.vercel.app'
+    ? 'https://ai-tools-backend-your-app.onrender.com'
     : 'http://localhost:3000'
 };
 
